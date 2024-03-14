@@ -4,7 +4,7 @@ import numpy as np
 import math
 
 
-def HoughEllipse(img):
+def hough_ellipse(img):
     """
     Функция позволяет находить на изображении эллипсы, параллельные
     горизонтальной оси с параметрами a=12, b=5.
