@@ -6,3 +6,8 @@
 ### Пример:
 ![Пример](results/report.png)
 
+### Тестирование:
+```
+$ cd src
+$ python3 -m pytest ../tests
+```
