@@ -1,25 +1,32 @@
 from itertools import product
+from PIL import Image
 from scipy.signal import convolve2d
 import numpy as np
 import math
 
+from numpy.typing import ArrayLike, NDArray
 
-def hough_ellipse(img):
+
+def hough_ellipse(img: Image.Image) -> ArrayLike:
     """
-    Функция позволяет находить на изображении эллипсы, параллельные
-    горизонтальной оси с параметрами a=12, b=5.
-    :return: центры найденных эллипсов
+    Function is able to find ellipses on a given image. Ellipses can be specified
+    by different a, b parameters and rotations.
+
+    Args:
+        img: Image to find ellipses on.
+    Returns:
+        List of params of found ellipses.
     """
 
-    gimg = img.convert(mode='L')
+    gimg = img.convert(mode="L")
 
     G_x = [[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]]
     G_y = [[-1, -1, -1], [0, 0, 0], [1, 1, 1]]
 
-    h_grad = convolve2d(gimg, G_x)
-    v_grad = convolve2d(gimg, G_y)
+    h_grad: NDArray = convolve2d(gimg, G_x)
+    v_grad: NDArray = convolve2d(gimg, G_y)
 
-    magnitude = np.sqrt(np.power(h_grad, 2) + np.power(v_grad, 2))
+    magnitude: NDArray = np.sqrt(np.power(h_grad, 2) + np.power(v_grad, 2))
 
     img_w_size = magnitude.shape[0]
     img_h_size = magnitude.shape[1]
@@ -48,8 +55,12 @@ def hough_ellipse(img):
             dy = -np.sign(dX) * a / np.sqrt(1 + (b / (a * xi)) ** 2)
         dx = -np.sign(dY) * b / np.sqrt(1 + (a * xi / b) ** 2)
 
-        RotationMatrix = np.array([[np.cos(theta_rad), -np.sin(theta_rad)],
-                                   [np.sin(theta_rad), np.cos(theta_rad)]])
+        RotationMatrix = np.array(
+            [
+                [np.cos(theta_rad), -np.sin(theta_rad)],
+                [np.sin(theta_rad), np.cos(theta_rad)],
+            ]
+        )
         # Rotate by angle theta
         dx, dy = RotationMatrix @ np.array([dx, dy])
 
@@ -57,7 +68,7 @@ def hough_ellipse(img):
         y_0 = int(y + dy)
 
         if 0 < x_0 < img_w_size and 0 < y_0 < img_h_size:
-            A[x_0, y_0, theta, a-5, b-5] += 1
+            A[x_0, y_0, theta, a - 5, b - 5] += 1
 
     ellipses_params = np.argwhere(A > 10)
     return ellipses_params

@@ -1,0 +1,49 @@
+[tool.poetry]
+name = "hough"
+version = "0.1.0"
+description = "This is Hough transform to detect ellipsies on images."
+authors = ["Ivan Konyushenko <koniushenko.id@phystech.edu>"]
+readme = "readme.md"
+packages = [{include = "hough", from="src"}]
+
+[tool.poetry.scripts]
+hough = 'hough.main:main'
+
+[tool.poetry.dependencies]
+python = "^3.9"
+numpy = "^1.26.4"
+pillow = "^10.3.0"
+matplotlib = "^3.8.4"
+scipy = "^1.13.0"
+opencv-python = "^4.9.0.80"
+click = "^8.1.7"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.0"
+coverage = {extras = ["toml"], version = "^7.5.1"}
+pytest-cov = "^5.0.0"
+black = "^24.4.2"
+flake8 = "^7.0.0"
+flake8-bandit = "^4.1.1"
+flake8-black = "^0.3.6"
+flake8-bugbear = "^24.4.26"
+flake8-import-order = "^0.18.2"
+safety = "^3.2.0"
+mypy = "^1.10.0"
+pytype = "^2024.4.11"
+flake8-annotations = "^3.1.1"
+sphinx-autodoc-typehints = "^2.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.coverange.path]
+source = ["src", "*/site-packages"]
+
+[tool.coverage.run]
+branch = true
+source = ["hough"]
+
+[tool.coverage.report]
+show_missing = true
